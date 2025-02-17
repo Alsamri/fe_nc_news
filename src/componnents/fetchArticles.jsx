@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+import { Link } from "react-router-dom";
 export const FetchArticles = () => {
   const [articles, setarticles] = useState([]);
   useEffect(() => {
@@ -21,7 +23,14 @@ export const FetchArticles = () => {
           <li key={article.article_id}>
             <img src={article.article_img_url} alt={article.title} />
             <div className="article-content">
-              <h3>{article.title}</h3>
+              <h3>
+                <Link
+                  to={`/articles/${article.article_id}`}
+                  className="article-link"
+                >
+                  {article.title}
+                </Link>
+              </h3>
               <p>
                 By <strong>{article.author}</strong>
               </p>
