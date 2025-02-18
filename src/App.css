@@ -138,3 +138,68 @@ p {
   color: #333;
   margin: 5px 0;
 }
+.article-detail {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.article-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.article-body {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.article-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment {
+  background: #f9f9f9;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.comment p {
+  margin: 5px 0;
+}
+.article-main {
+  font-weight: 600;
+  color: #333;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #222;
+}
+
+.comment-date {
+  font-style: italic;
+  color: #555;
+}
+
+.comment-body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.comment-votes {
+  font-weight: 500;
+  color: #0077cc;
+}

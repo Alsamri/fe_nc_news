@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const main_url = "https://nc-project-news.onrender.com/api";
 
 export const getArticles = () => {
@@ -18,6 +17,16 @@ export const getArticleById = (id) => {
     .then((response) => response.data.article)
     .catch((error) => {
       console.error("Error fetching article details", error);
+      throw error;
+    });
+};
+
+export const getArticleCommentsById = (id) => {
+  return axios
+    .get(`${main_url}/articles/${id}/comments`)
+    .then((response) => response.data.comment)
+    .catch((error) => {
+      console.error("Error fetching comments details", error);
       throw error;
     });
 };
