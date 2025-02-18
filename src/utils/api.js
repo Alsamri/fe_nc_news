@@ -30,3 +30,13 @@ export const getArticleCommentsById = (id) => {
       throw error;
     });
 };
+
+export const patchArticleVotes = (id, voteCount) => {
+  return axios
+    .patch(`${main_url}/articles/${id}`, { inc_votes: voteCount })
+    .then((response) => response.data.article)
+    .catch((error) => {
+      console.error("Error updating votes", error);
+      throw error;
+    });
+};
