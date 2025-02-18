@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getArticleById, getArticleCommentsById } from "../utils/api";
+import {
+  getArticleById,
+  getArticleCommentsById,
+  patchArticleVotes,
+} from "../utils/api";
 
 export const ArticleDetails = () => {
   const [articledetail, setarticledetail] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [Comments, setComments] = useState([]);
+  const [voteCount, setVoteCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
   useEffect(() => {
     getArticleById(id)
       .then((data) => {
         setarticledetail(data);
-
+        setCommentCount(data.comment_count);
         setLoading(false);
+        setVoteCount(data.votes);
       })
       .catch((error) => {
         console.error(error);
@@ -23,6 +30,21 @@ export const ArticleDetails = () => {
       .catch((error) => console.error(error));
   }, [id]);
 
+  const VotingSystem = (addition) => {
+    const newVote = voteCount + addition;
+    setVoteCount(newVote);
+    patchArticleVotes(id, addition)
+      .then((updatedArticle) => {
+        setarticledetail(() => ({
+          ...updatedArticle,
+          votes: updatedArticle.votes,
+        }));
+      })
+      .catch((error) => {
+        console.error(error);
+        setVoteCount(newVote);
+      });
+  };
   if (loading) {
     return <p>Loading article details...</p>;
   }
@@ -47,13 +69,14 @@ export const ArticleDetails = () => {
       />
       <p className="article-body">{articledetail.body}</p>
       <div className="article-info">
+        <p>Votes: {voteCount}</p>
+        <button onClick={() => VotingSystem(1)}>⬆ Upvote</button>
+        <button onClick={() => VotingSystem(-1)}>⬇ Downvote</button>
         <p>
-          <strong>Votes:</strong> {articledetail.votes}
-        </p>
-        <p>
-          <strong>Comments:</strong> {articledetail.comment_count}
+          <strong>Comments:</strong> {commentCount}
         </p>
       </div>
+
       <h3>Comments</h3>
       {Comments.length > 0 ? (
         <ul className="comments-list">
