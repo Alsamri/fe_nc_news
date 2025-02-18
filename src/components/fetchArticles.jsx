@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-
 import { Link } from "react-router-dom";
+import { getArticles } from "../utils/api";
+
 export const FetchArticles = () => {
   const [articles, setarticles] = useState([]);
   useEffect(() => {
-    axios
-      .get("https://nc-project-news.onrender.com/api/articles")
-      .then((response) => {
-        setarticles(response.data.result);
+    getArticles()
+      .then((data) => {
+        setarticles(data);
       })
       .catch((error) => {
-        console.error("Error fetching items:", error);
+        console.error(error);
       });
   }, []);
 
   return (
     <>
-      <h2 style={{ textAlign: "center", color: "white" }}>Articles</h2>
+      <h2>Articles</h2>
       <ul className="container">
         {articles.map((article) => (
           <li key={article.article_id}>

@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { getArticleById } from "../utils/api";
+
 export const ArticleDetails = () => {
   const [articledetail, setarticledetail] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`https://nc-project-news.onrender.com/api/articles/${id}`)
-      .then((response) => {
-        setarticledetail(response.data.article);
-        console.log(response.data);
+    getArticleById(id)
+      .then((data) => {
+        setarticledetail(data);
 
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching items:", error);
+        console.error(error);
         setLoading(false);
       });
   }, [id]);
