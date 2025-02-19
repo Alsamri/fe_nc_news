@@ -53,3 +53,17 @@ export const postComments = (id, username, body) => {
       throw error;
     });
 };
+
+export const deleteComment = (comment_id, username) => {
+  return axios
+    .delete(`${main_url}/comments/${comment_id}`, {
+      data: { username },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error deleting comment", error);
+      throw error;
+    });
+};
