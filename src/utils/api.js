@@ -45,9 +45,7 @@ export const patchArticleVotes = (id, voteCount) => {
 export const postComments = (id, username, body) => {
   return axios
     .post(`${main_url}/articles/${id}/comments`, { username, body })
-    .then((response) => {
-      return response.data.comment;
-    })
+    .then((response) => response.data.comment)
     .catch((error) => {
       console.error("Error posting comment", error);
       throw error;
@@ -59,11 +57,31 @@ export const deleteComment = (comment_id, username) => {
     .delete(`${main_url}/comments/${comment_id}`, {
       data: { username },
     })
-    .then((response) => {
-      return response.data;
-    })
+    .then((response) => response.data)
     .catch((error) => {
       console.error("Error deleting comment", error);
+      throw error;
+    });
+};
+
+export const getTopics = () => {
+  return axios
+    .get(`${main_url}/topics`)
+    .then((response) => response.data.topics)
+    .catch((error) => {
+      console.error("Error fetching topics", error);
+      throw error;
+    });
+};
+
+export const getArticlesByTopic = (topic) => {
+  return axios
+    .get(`${main_url}/articles?topic=${topic}`)
+    .then((response) => {
+      return response.data.result;
+    })
+    .catch((error) => {
+      console.error("Error fetching articles by topic", error);
       throw error;
     });
 };
