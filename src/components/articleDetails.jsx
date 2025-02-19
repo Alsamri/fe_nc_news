@@ -15,6 +15,7 @@ export const ArticleDetails = () => {
   const [voteCount, setVoteCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [newComment, setNewComment] = useState("");
+  const [username, setUsername] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -55,17 +56,18 @@ export const ArticleDetails = () => {
     setIsSubmitting(true);
     setError(null);
 
-    const username = "weegembump";
-
-    if (!newComment.trim()) {
-      setError("Comment cannot be empty.");
+    if (!username.trim() || !newComment.trim()) {
+      setError("Username and comment cannot be empty.");
       setIsSubmitting(false);
       return;
     }
     postComments(id, username, newComment)
       .then((newCommentDetails) => {
+        console.log(username);
+
         setComments((priorComments) => [newCommentDetails, ...priorComments]);
         setNewComment("");
+        setUsername("");
         setCommentCount((priorCount) => {
           parseInt(priorCount) + 1;
         });
@@ -110,6 +112,13 @@ export const ArticleDetails = () => {
       </div>
       <h3>Add a Comment</h3>
       <form onSubmit={operateCommentSubmit} className="comment-form">
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="enter your username"
+          required
+        />
         <textarea
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}

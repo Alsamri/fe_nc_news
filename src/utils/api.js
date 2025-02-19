@@ -45,7 +45,9 @@ export const patchArticleVotes = (id, voteCount) => {
 export const postComments = (id, username, body) => {
   return axios
     .post(`${main_url}/articles/${id}/comments`, { username, body })
-    .then((response) => response.data.comment)
+    .then((response) => {
+      return response.data.comment;
+    })
     .catch((error) => {
       console.error("Error posting comment", error);
       throw error;
