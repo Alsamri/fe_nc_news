@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const main_url = "https://nc-project-news.onrender.com/api";
 
 export const getArticles = () => {
@@ -37,6 +38,16 @@ export const patchArticleVotes = (id, voteCount) => {
     .then((response) => response.data.article)
     .catch((error) => {
       console.error("Error updating votes", error);
+      throw error;
+    });
+};
+
+export const postComments = (id, username, body) => {
+  return axios
+    .post(`${main_url}/articles/${id}/comments`, { username, body })
+    .then((response) => response.data.comment)
+    .catch((error) => {
+      console.error("Error posting comment", error);
       throw error;
     });
 };

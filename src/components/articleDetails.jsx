@@ -4,6 +4,7 @@ import {
   getArticleById,
   getArticleCommentsById,
   patchArticleVotes,
+  postComments,
 } from "../utils/api";
 
 export const ArticleDetails = () => {
@@ -13,6 +14,9 @@ export const ArticleDetails = () => {
   const [Comments, setComments] = useState([]);
   const [voteCount, setVoteCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const [newComment, setNewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   useEffect(() => {
     getArticleById(id)
       .then((data) => {
@@ -43,6 +47,34 @@ export const ArticleDetails = () => {
       .catch((error) => {
         console.error(error);
         setVoteCount(newVote);
+      });
+  };
+
+  const operateCommentSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    const username = "weegembump";
+
+    if (!newComment.trim()) {
+      setError("Comment cannot be empty.");
+      setIsSubmitting(false);
+      return;
+    }
+    postComments(id, username, newComment)
+      .then((newCommentDetails) => {
+        setComments((priorComments) => [newCommentDetails, ...priorComments]);
+        setNewComment("");
+        setCommentCount((priorCount) => {
+          parseInt(priorCount) + 1;
+        });
+        setIsSubmitting(false);
+      })
+      .catch((error) => {
+        console.error("Failed to post comment", error);
+        setError("Failed to post comment. Please try again.");
+        setIsSubmitting(false);
       });
   };
   if (loading) {
@@ -76,6 +108,21 @@ export const ArticleDetails = () => {
           <strong>Comments:</strong> {commentCount}
         </p>
       </div>
+      <h3>Add a Comment</h3>
+      <form onSubmit={operateCommentSubmit} className="comment-form">
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="write your comment here..."
+          required
+          className="comment-textarea"
+        />
+        <br />
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Posting..." : "Post Comment"}
+        </button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </form>
 
       <h3>Comments</h3>
       {Comments.length > 0 ? (
