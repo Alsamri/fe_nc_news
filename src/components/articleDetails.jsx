@@ -64,9 +64,11 @@ export const ArticleDetails = () => {
     }
     postComments(id, username, newComment)
       .then((newCommentDetails) => {
+        console.log(username);
+
         setComments((priorComments) => [newCommentDetails, ...priorComments]);
         setNewComment("");
-        setUsername(username);
+        setUsername("");
         setCommentCount((priorCount) => parseInt(priorCount) + 1);
         setIsSubmitting(false);
       })
@@ -76,7 +78,6 @@ export const ArticleDetails = () => {
         setIsSubmitting(false);
       });
   };
-
   const operateDeleteComment = (comment_id, username) => {
     deleteComment(comment_id, username)
       .then(() => {
@@ -90,7 +91,6 @@ export const ArticleDetails = () => {
         setError("Failed to delete comment. Please try again.");
       });
   };
-
   if (loading) {
     return <p>Loading article details...</p>;
   }
