@@ -2,12 +2,12 @@ import axios from "axios";
 
 const main_url = "https://nc-project-news.onrender.com/api";
 
-export const getArticles = () => {
+export const getArticles = ({ sortBy = "created_at", order = "desc" }) => {
   return axios
-    .get(`${main_url}/articles`)
+    .get(`${main_url}/articles?sort_by=${sortBy}&order=${order}`)
     .then((response) => response.data.result)
     .catch((error) => {
-      console.error("Error fetching articles", error);
+      console.error("Error fetching articles:", error);
       throw error;
     });
 };
