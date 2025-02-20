@@ -7,7 +7,7 @@ export const getArticles = ({ sortBy = "created_at", order = "desc" } = {}) => {
     .get(`${main_url}/articles?sort_by=${sortBy}&order=${order}`)
     .then((response) => response.data.result)
     .catch((error) => {
-      console.error("Error fetching articles:", error);
+      console.error("Error fetching articles", error);
       throw error;
     });
 };
@@ -83,5 +83,14 @@ export const getArticlesByTopic = (topic) => {
     .catch((error) => {
       console.error("Error fetching articles by topic", error);
       throw error;
+    });
+};
+export const voteOnComment = (id, incVotes) => {
+  return axios
+    .patch(`${main_url}/comments/${id}`, { inc_votes: incVotes })
+    .then(({ data }) => data.comment)
+    .catch((err) => {
+      console.error("Error voting on comment", err);
+      throw err;
     });
 };
