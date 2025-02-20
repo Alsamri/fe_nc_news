@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  deleteComment,
   getArticleById,
   getArticleCommentsById,
   patchArticleVotes,
@@ -68,15 +69,26 @@ export const ArticleDetails = () => {
         setComments((priorComments) => [newCommentDetails, ...priorComments]);
         setNewComment("");
         setUsername("");
-        setCommentCount((priorCount) => {
-          parseInt(priorCount) + 1;
-        });
+        setCommentCount((priorCount) => parseInt(priorCount) + 1);
         setIsSubmitting(false);
       })
       .catch((error) => {
         console.error("Failed to post comment", error);
         setError("Failed to post comment. Please try again.");
         setIsSubmitting(false);
+      });
+  };
+  const operateDeleteComment = (comment_id, username) => {
+    deleteComment(comment_id, username)
+      .then(() => {
+        setComments((priorComments) =>
+          priorComments.filter((comment) => comment.comment_id !== comment_id)
+        );
+        setCommentCount((priorCount) => parseInt(priorCount) - 1);
+      })
+      .catch((error) => {
+        console.error("Failed to delete comment", error);
+        setError("Failed to delete comment. Please try again.");
       });
   };
   if (loading) {
@@ -146,6 +158,16 @@ export const ArticleDetails = () => {
               </p>
               <p className="comment-body">{comment.body}</p>
               <p className="comment-votes">Votes: {comment.votes}</p>
+              {username === comment.author && (
+                <button
+                  onClick={() =>
+                    operateDeleteComment(comment.comment_id, username)
+                  }
+                  className="delete-comment-button"
+                >
+                  Delete Comment
+                </button>
+              )}
             </li>
           ))}
         </ul>
