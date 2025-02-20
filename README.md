@@ -23,15 +23,19 @@ Node.js: v23.3.0
 
 Running Locally:
 1- Clone the repository
-git clone [YOUR_REPO_URL](https://github.com/Alsamri/fe_nc_news.git)
 
-2- Navigate to the project directory
+git clone [Github Link](https://github.com/Alsamri/fe_nc_news.git)
+
+2- Navigate to the project directory:
+
 cd nc-news/nc-news-FE-project/
 
-3- Install dependencies
+3- Install dependencies:
+
 npm install
 
-4- Start the development server
+4- Start the development server:
+
 npm start
 
 ---
