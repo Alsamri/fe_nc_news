@@ -7,6 +7,7 @@ import {
   patchArticleVotes,
   postComments,
 } from "../utils/api";
+import { Comment } from "./voteonComments";
 
 export const ArticleDetails = () => {
   const [articledetail, setarticledetail] = useState(null);
@@ -107,7 +108,6 @@ export const ArticleDetails = () => {
       <p className="article-main">
         Published on: {new Date(articledetail.created_at).toLocaleDateString()}
       </p>
-
       <img
         src={articledetail.article_img_url}
         alt={articledetail.title}
@@ -144,20 +144,12 @@ export const ArticleDetails = () => {
         </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
-
       <h3>Comments</h3>
       {Comments.length > 0 ? (
         <ul className="comments-list">
           {Comments.map((comment) => (
             <li key={comment.comment_id} className="comment">
-              <p className="comment-author">
-                {comment.author}{" "}
-                <span className="comment-date">
-                  ({new Date(comment.created_at).toLocaleDateString()})
-                </span>
-              </p>
-              <p className="comment-body">{comment.body}</p>
-              <p className="comment-votes">Votes: {comment.votes}</p>
+              <Comment comment={comment} />
               {username === comment.author && (
                 <button
                   onClick={() =>
