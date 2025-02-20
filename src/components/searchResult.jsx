@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { getArticles } from "../utils/api";
-import { SortByArticles } from "./sortarticleBy";
-import { SearchBar } from "./searchBar";
-export const FetchArticles = () => {
-  const [articles, setarticles] = useState([]);
+
+export const SearchResults = () => {
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
-  useEffect(() => {
-    const sortBy = searchParams.get("sort_by") || "created_at";
-    const order = searchParams.get("order") || "desc";
+  const query = searchParams.get("query");
 
-    getArticles({ sortBy, order })
-      .then((data) => {
-        setarticles(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
-  }, [searchParams]);
-  if (loading) {
-    return <p>Loading articles...</p>;
-  }
+  useEffect(() => {
+    if (query) {
+      getArticles({})
+        .then((data) => {
+          setArticles(
+            data.filter((article) =>
+              article.title.toLowerCase().includes(query.toLowerCase())
+            )
+          );
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [query]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!articles.length) return <p>No results found for "{query}"</p>;
+
   return (
     <>
-      <h2>Articles</h2>
-      <SearchBar />
-      <SortByArticles />
-
+      <h2>Search Results for "{query}"</h2>
       <ul className="container">
         {articles.map((article) => (
           <li key={article.article_id}>
