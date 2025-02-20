@@ -4,6 +4,7 @@ import { FetchArticles } from "./components/fetchArticles";
 import { ArticleDetails } from "./components/articleDetails";
 import { FetchTopics } from "./components/fetchTopics";
 import { ArticlesByTopic } from "./components/articlesByTopic";
+import { SearchResults } from "./components/searchResult";
 
 function HomePage() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/articles/:id" element={<ArticleDetails />} />
         <Route path="/topics/:topic" element={<ArticlesByTopic />} />
+        <Route path="/search" element={<SearchResults />} />
       </Routes>
     </Router>
   );
