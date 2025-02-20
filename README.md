@@ -34,4 +34,6 @@ npm install
 4- Start the development server
 npm start
 
+---
+
 This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
