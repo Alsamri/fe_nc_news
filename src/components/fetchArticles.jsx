@@ -26,8 +26,8 @@ export const FetchArticles = () => {
   }
   return (
     <>
-      <h2>Articles</h2>
       <SearchBar />
+      <h2>Articles</h2>
       <SortByArticles />
 
       <ul className="container">

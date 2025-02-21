@@ -20,6 +20,7 @@ export const ArticleDetails = () => {
   const [username, setUsername] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [isVoting, setIsVoting] = useState(false);
   useEffect(() => {
     getArticleById(id)
       .then((data) => {
@@ -38,18 +39,26 @@ export const ArticleDetails = () => {
   }, [id]);
 
   const VotingSystem = (addition) => {
+    if (isVoting) return;
     const newVote = voteCount + addition;
     setVoteCount(newVote);
+    setIsVoting(true);
     patchArticleVotes(id, addition)
       .then((updatedArticle) => {
-        setarticledetail(() => ({
-          ...updatedArticle,
-          votes: updatedArticle.votes,
-        }));
+        setarticledetail(
+          () => (
+            setIsVoting(false),
+            {
+              ...updatedArticle,
+              votes: updatedArticle.votes,
+            }
+          )
+        );
       })
       .catch((error) => {
         console.error(error);
-        setVoteCount(newVote);
+        setVoteCount(voteCount - addition);
+        setIsVoting(false);
       });
   };
 
@@ -65,8 +74,6 @@ export const ArticleDetails = () => {
     }
     postComments(id, username, newComment)
       .then((newCommentDetails) => {
-        console.log(username);
-
         setComments((priorComments) => [newCommentDetails, ...priorComments]);
         setNewComment("");
         setUsername("");
@@ -116,8 +123,12 @@ export const ArticleDetails = () => {
       <p className="article-body">{articledetail.body}</p>
       <div className="article-info">
         <p>Votes: {voteCount}</p>
-        <button onClick={() => VotingSystem(1)}>⬆ Upvote</button>
-        <button onClick={() => VotingSystem(-1)}>⬇ Downvote</button>
+        <button onClick={() => VotingSystem(1)} disabled={isVoting}>
+          ⬆ Upvote
+        </button>
+        <button onClick={() => VotingSystem(-1)} disabled={isVoting}>
+          ⬇ Downvote
+        </button>
         <p>
           <strong>Comments:</strong> {commentCount}
         </p>

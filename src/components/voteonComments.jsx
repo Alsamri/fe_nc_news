@@ -14,11 +14,11 @@ export const Comment = ({ comment }) => {
 
     voteOnComment(comment.comment_id, voteChange)
       .then((updatedComment) => {
-        setVotes(updatedComment.votes); // Sync with backend response
+        setVotes(updatedComment.votes);
         setIsVoting(false);
       })
       .catch(() => {
-        setVotes((prevVotes) => prevVotes - voteChange); // Revert on failure
+        setVotes((prevVotes) => prevVotes - voteChange);
         setError("Failed to update vote. Try again.");
         setIsVoting(false);
       });

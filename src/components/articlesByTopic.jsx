@@ -13,7 +13,7 @@ export const ArticlesByTopic = () => {
 
   useEffect(() => {
     setLoading(true);
-    getArticlesByTopic(topic, { sortBy, order })
+    getArticlesByTopic(topic, { sort_by: sortBy, order })
       .then((data) => {
         setArticles(data);
         setLoading(false);
@@ -25,13 +25,17 @@ export const ArticlesByTopic = () => {
   }, [topic, sortBy, order]);
 
   const handleSortChange = (event) => {
-    const newSortBy = event.target.value;
-    setSearchParams({ sort_by: newSortBy, order });
+    setSearchParams({
+      sort_by: event.target.value,
+      order,
+    });
   };
 
   const handleOrderChange = (event) => {
-    const newOrder = event.target.value;
-    setSearchParams({ sort_by: sortBy, order: newOrder });
+    setSearchParams({
+      sort_by: sortBy,
+      order: event.target.value,
+    });
   };
 
   if (loading) return <p>Loading articles...</p>;
@@ -59,9 +63,9 @@ export const ArticlesByTopic = () => {
       {articles.length === 0 ? (
         <p>No articles found for this topic.</p>
       ) : (
-        <ul>
+        <ul className="article-detail">
           {articles.map((article) => (
-            <li key={article.article_id}>
+            <li key={article.article_id} className="article-main">
               <Link to={`/articles/${article.article_id}`}>
                 {article.title}
               </Link>
