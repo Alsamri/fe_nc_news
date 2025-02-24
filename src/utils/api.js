@@ -89,8 +89,18 @@ export const voteOnComment = (id, incVotes) => {
   return axios
     .patch(`${main_url}/comments/${id}`, { inc_votes: incVotes })
     .then(({ data }) => data.comment)
-    .catch((err) => {
+    .catch((error) => {
       console.error("Error voting on comment", err);
-      throw err;
+      throw error;
+    });
+};
+
+export const getUsers = () => {
+  return axios
+    .get(`${main_url}/users`)
+    .then((response) => response.data.users)
+    .catch((error) => {
+      console.error("Error fetching users", error);
+      throw error;
     });
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   deleteComment,
@@ -7,6 +7,7 @@ import {
   patchArticleVotes,
   postComments,
 } from "../utils/api";
+import { UserContext } from "./loggedUserContext";
 import { Comment } from "./voteonComments";
 
 export const ArticleDetails = () => {
@@ -21,6 +22,10 @@ export const ArticleDetails = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [isVoting, setIsVoting] = useState(false);
+
+  const { loggedInUser } = useContext(UserContext);
+  const userName = loggedInUser.username;
+
   useEffect(() => {
     getArticleById(id)
       .then((data) => {
@@ -67,16 +72,16 @@ export const ArticleDetails = () => {
     setIsSubmitting(true);
     setError(null);
 
-    if (!username.trim() || !newComment.trim()) {
+    if (!userName || !newComment.trim()) {
       setError("Username and comment cannot be empty.");
       setIsSubmitting(false);
       return;
     }
-    postComments(id, username, newComment)
+
+    postComments(id, userName, newComment)
       .then((newCommentDetails) => {
         setComments((priorComments) => [newCommentDetails, ...priorComments]);
         setNewComment("");
-        setUsername("");
         setCommentCount((priorCount) => parseInt(priorCount) + 1);
         setIsSubmitting(false);
       })
@@ -86,8 +91,13 @@ export const ArticleDetails = () => {
         setIsSubmitting(false);
       });
   };
+
   const operateDeleteComment = (comment_id, username) => {
-    deleteComment(comment_id, username)
+    if (!userName || userName !== username) {
+      setError("You can only delete your own comments.");
+      return;
+    }
+    deleteComment(comment_id, userName)
       .then(() => {
         setComments((priorComments) =>
           priorComments.filter((comment) => comment.comment_id !== comment_id)
@@ -133,38 +143,39 @@ export const ArticleDetails = () => {
           <strong>Comments:</strong> {commentCount}
         </p>
       </div>
-      <h3>Add a Comment</h3>
-      <form onSubmit={operateCommentSubmit} className="comment-form">
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="enter your username"
-          required
-        />
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="write your comment here..."
-          required
-          className="comment-textarea"
-        />
-        <br />
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Posting..." : "Post Comment"}
-        </button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+
+      {loggedInUser ? (
+        <>
+          <h3>Add a Comment</h3>
+          <form onSubmit={operateCommentSubmit} className="comment-form">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write your comment here..."
+              required
+              className="comment-textarea"
+            />
+            <br />
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Posting..." : "Post Comment"}
+            </button>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </form>
+        </>
+      ) : (
+        <p>Please log in to post comments.</p>
+      )}
+
       <h3>Comments</h3>
       {Comments.length > 0 ? (
         <ul className="comments-list">
           {Comments.map((comment) => (
             <li key={comment.comment_id} className="comment">
               <Comment comment={comment} />
-              {username === comment.author && (
+              {userName === comment.author && (
                 <button
                   onClick={() =>
-                    operateDeleteComment(comment.comment_id, username)
+                    operateDeleteComment(comment.comment_id, comment.author)
                   }
                   className="delete-comment-button"
                 >
