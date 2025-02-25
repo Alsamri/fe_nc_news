@@ -18,7 +18,6 @@ export const ArticleDetails = () => {
   const [voteCount, setVoteCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [newComment, setNewComment] = useState("");
-  const [username, setUsername] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [isVoting, setIsVoting] = useState(false);
@@ -163,7 +162,7 @@ export const ArticleDetails = () => {
           </form>
         </>
       ) : (
-        <p>Please log in to post comments.</p>
+        <p>Please log in to post a comment.</p>
       )}
 
       <h3>Comments</h3>
