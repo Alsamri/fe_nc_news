@@ -104,3 +104,19 @@ export const getUsers = () => {
       throw error;
     });
 };
+
+export const postArticle = (author, title, body, topic, article_img_url) => {
+  return axios
+    .post(`${main_url}/articles`, {
+      author,
+      title,
+      body,
+      topic,
+      article_img_url,
+    })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error posting article", error);
+      throw error;
+    });
+};

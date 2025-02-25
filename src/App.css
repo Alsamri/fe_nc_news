@@ -529,3 +529,73 @@ header h1 {
 .topics-container li a:hover {
   color: #f39c12;
 }
+.add-new-article {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-new-article h2 {
+  text-align: center;
+  color: #333;
+}
+
+.add-new-article form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-new-article label {
+  font-weight: bold;
+  color: #555;
+}
+
+.add-new-article input,
+.add-new-article textarea {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.add-new-article textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.add-new-article button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-new-article button:disabled {
+  background-color: #ccc;
+}
+
+.add-new-article button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.add-new-article p {
+  text-align: center;
+  font-size: 14px;
+}
+
+.add-new-article p.error {
+  color: red;
+}
+
+.add-new-article p.success {
+  color: green;
+}
