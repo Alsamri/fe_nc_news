@@ -59,7 +59,9 @@ export const ArticlesByTopic = () => {
           <option value="asc">Ascending</option>
         </select>
       </div>
-
+      <Link to="/post-article">
+        <button className="add-article-btn">➕ Add New Article</button>
+      </Link>
       {articles.length === 0 ? (
         <p>No articles found for this topic.</p>
       ) : (

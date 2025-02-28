@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 export const SortByArticles = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -27,6 +27,9 @@ export const SortByArticles = () => {
       <button onClick={handleOrder} className="sort-button">
         {order === "asc" ? "⬆ Ascending" : "⬇ Descending"}
       </button>
+      <Link to="/post-article">
+        <button className="add-article-btn">➕ Add New Article</button>
+      </Link>
     </div>
   );
 };
