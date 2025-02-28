@@ -29,6 +29,9 @@ export const SearchResults = () => {
   return (
     <>
       <h2>Search Results for "{query}"</h2>
+      <Link to="/post-article">
+        <button className="add-article-btn">➕ Add New Article</button>
+      </Link>
       <ul className="container">
         {articles.map((article) => (
           <li key={article.article_id}>
