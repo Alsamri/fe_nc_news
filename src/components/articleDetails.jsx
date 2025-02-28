@@ -6,6 +6,7 @@ import {
   getArticleCommentsById,
   patchArticleVotes,
   postComments,
+  deleteArticle,
 } from "../utils/api";
 import { UserContext } from "./loggedUserContext";
 import { Comment } from "./voteonComments";
@@ -23,7 +24,7 @@ export const ArticleDetails = () => {
   const [isVoting, setIsVoting] = useState(false);
 
   const { loggedInUser } = useContext(UserContext);
-  const userName = loggedInUser.username;
+  const userName = loggedInUser?.username || null;
 
   useEffect(() => {
     getArticleById(id)
@@ -108,6 +109,19 @@ export const ArticleDetails = () => {
         setError("Failed to delete comment. Please try again.");
       });
   };
+
+  const ArticlesDelete = () => {
+    if (window.confirm("Are you sure you want to delete this article?")) {
+      deleteArticle(id)
+        .then(() => {
+          alert("Article deleted successfully.");
+          navigate("/");
+        })
+        .catch(() => {
+          alert("Failed to delete article.");
+        });
+    }
+  };
   if (loading) {
     return <p>Loading article details...</p>;
   }
@@ -130,6 +144,11 @@ export const ArticleDetails = () => {
         className="article-img"
       />
       <p className="article-body">{articledetail.body}</p>
+      {userName === articledetail?.author && (
+        <button className="delete-button" onClick={ArticlesDelete}>
+          Delete Article
+        </button>
+      )}
       <div className="article-info">
         <p>Votes: {voteCount}</p>
         <button onClick={() => VotingSystem(1)} disabled={isVoting}>

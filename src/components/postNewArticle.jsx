@@ -7,7 +7,7 @@ export const AddNewArticle = () => {
   const userName = loggedInUser ? loggedInUser.username : "";
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
-  const [topic, setTopic] = useState([]);
+  const [topics, setTopics] = useState([]);
   const [ImgUrl, setImgUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -28,7 +28,7 @@ export const AddNewArticle = () => {
       userName,
       title,
       body,
-      topics.join(", "),
+      topics,
       ImgUrl || "http://DefaultURL-IMG.jpg"
     )
       .then((data) => {
@@ -37,7 +37,7 @@ export const AddNewArticle = () => {
         setSuccessMessage(`Article posted successfully!: ${data.article_id}`);
         setTitle("");
         setBody("");
-        setTopic([]);
+        setTopics([]);
         setImgUrl("");
       })
       .catch(() => {
@@ -47,11 +47,7 @@ export const AddNewArticle = () => {
         setIsSubmitting(false);
       });
   };
-  const handleTopicChange = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions);
-    const selectedTopics = selectedOptions.map((option) => option.value);
-    setTopics(selectedTopics);
-  };
+
   return (
     <div className="add-new-article">
       <h2>Post a New Article</h2>
@@ -76,12 +72,16 @@ export const AddNewArticle = () => {
         />
 
         <label>Topic:</label>
-        <input
-          type="text"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
+        <select
+          value={topics}
+          onChange={(e) => setTopics(e.target.value)}
           required
-        />
+        >
+          <option value="">Select a topic</option>
+          <option value="coding">Coding</option>
+          <option value="football">Football</option>
+          <option value="cooking">Cooking</option>
+        </select>
 
         <label>Image URL (Optional):</label>
         <input
