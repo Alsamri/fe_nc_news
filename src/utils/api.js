@@ -120,3 +120,15 @@ export const postArticle = (author, title, body, topic, article_img_url) => {
       throw error;
     });
 };
+
+export const deleteArticle = (id) => {
+  return axios
+    .delete(`${main_url}/articles/${id}`)
+    .then(() => {
+      console.log("Article deleted successfully");
+    })
+    .catch((error) => {
+      console.error("Failed to delete article", error);
+      throw new Error("Could not delete the article.");
+    });
+};
