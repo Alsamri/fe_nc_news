@@ -7,20 +7,32 @@ export const FetchArticles = () => {
   const [articles, setarticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [limit] = useState(5);
   useEffect(() => {
     const sortBy = searchParams.get("sort_by") || "created_at";
     const order = searchParams.get("order") || "desc";
 
-    getArticles({ sortBy, order })
+    getArticles({ sortBy, order, page: currentPage, limit })
       .then((data) => {
-        setarticles(data);
+        console.log(data);
+
+        setarticles(data || []);
+        setTotalCount(data.total_count || 0);
         setLoading(false);
       })
       .catch((error) => {
         console.error(error);
         setLoading(false);
       });
-  }, [searchParams]);
+  }, [searchParams, currentPage, limit]);
+  const totalPages = Math.ceil(totalCount / limit);
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
   if (loading) {
     return <p>Loading articles...</p>;
   }
@@ -53,6 +65,23 @@ export const FetchArticles = () => {
           </li>
         ))}
       </ul>
+      <div className="pagination-controls">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)} // Go to previous page
+          disabled={currentPage === 1} // Disable if already on the first page
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)} // Go to next page
+          disabled={currentPage === totalPages} // Disable if already on the last page
+        >
+          Next
+        </button>
+      </div>
     </>
   );
 };
