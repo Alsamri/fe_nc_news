@@ -91,11 +91,22 @@ export const getTopics = () => {
     });
 };
 
-export const getArticlesByTopic = (topic) => {
+export const getArticlesByTopic = (topic, { sort_by, order, page, limit }) => {
   return axios
-    .get(`${main_url}/articles?topic=${topic}`)
+    .get(`${main_url}/articles`, {
+      params: {
+        topic: topic,
+        sort_by: sort_by,
+        order: order,
+        page: page,
+        limit: limit,
+      },
+    })
     .then((response) => {
-      return response.data.result;
+      return {
+        articles: response.data.result,
+        total_count: response.data.total_count,
+      };
     })
     .catch((error) => {
       console.error("Error fetching articles by topic", error);

@@ -10,19 +10,27 @@ export const ArticlesByTopic = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const sortBy = searchParams.get("sort_by") || "created_at";
   const order = searchParams.get("order") || "desc";
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit] = useState(5);
+  const [totalCount, setTotalCount] = useState(0);
   useEffect(() => {
     setLoading(true);
-    getArticlesByTopic(topic, { sort_by: sortBy, order })
+    getArticlesByTopic(topic, {
+      sort_by: sortBy,
+      order,
+      page: currentPage,
+      limit,
+    })
       .then((data) => {
-        setArticles(data);
+        setArticles(data.articles);
+        setTotalCount(data.total_count);
         setLoading(false);
       })
       .catch((err) => {
         setError("Failed to load articles.");
         setLoading(false);
       });
-  }, [topic, sortBy, order]);
+  }, [topic, sortBy, order, currentPage, limit]);
 
   const handleSortChange = (event) => {
     setSearchParams({
@@ -31,13 +39,17 @@ export const ArticlesByTopic = () => {
     });
   };
 
-  const handleOrderChange = (event) => {
-    setSearchParams({
-      sort_by: sortBy,
-      order: event.target.value,
-    });
+  const handleOrderChange = () => {
+    searchParams.set("order", order === "asc" ? "desc" : "asc");
+    setSearchParams(searchParams);
   };
+  const totalPages = Math.ceil(totalCount / limit);
 
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
   if (loading) return <p>Loading articles...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
@@ -45,23 +57,22 @@ export const ArticlesByTopic = () => {
     <div>
       <h2>Articles about "{topic}"</h2>
 
-      <div>
-        <label>Sort by: </label>
-        <select value={sortBy} onChange={handleSortChange}>
+      <div className="sort-container">
+        <label htmlFor="sort-by">Sort by: </label>
+        <select id="sort-by" value={sortBy} onChange={handleSortChange}>
           <option value="created_at">Date</option>
-          <option value="comment_count">Comment Count</option>
           <option value="votes">Votes</option>
+          <option value="comment_count">Comments</option>
         </select>
 
-        <label> Order: </label>
-        <select value={order} onChange={handleOrderChange}>
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
-        </select>
+        <button onClick={handleOrderChange} className="sort-button">
+          {order === "asc" ? "⬆ Ascending" : "⬇ Descending"}
+        </button>
+
+        <Link to="/post-article">
+          <button className="add-article-btn">➕ Add New Article</button>
+        </Link>
       </div>
-      <Link to="/post-article">
-        <button className="add-article-btn">➕ Add New Article</button>
-      </Link>
       {articles.length === 0 ? (
         <p>No articles found for this topic.</p>
       ) : (
@@ -83,6 +94,23 @@ export const ArticlesByTopic = () => {
           ))}
         </ul>
       )}
+      <div className="pagination-controls">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
