@@ -9,14 +9,13 @@ import { HeaderMenu } from "./components/headerMenu";
 import { AllUsers } from "./components/userdetails";
 import { UserProvider } from "./components/loggedUserContext";
 import { AddNewArticle } from "./components/postNewArticle";
+import { About } from "./components/about";
 
 function HomePage() {
   return (
     <>
       <FetchTopics />
-      {/* <Link to="/post-article">
-        <button>Add New Article</button>
-      </Link> */}
+
       <FetchArticles />
     </>
   );
@@ -30,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/post-article" element={<AddNewArticle />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<About />} />
           <Route path="/articles/:id" element={<ArticleDetails />} />
           <Route path="/topics/:topic" element={<ArticlesByTopic />} />
           <Route path="/search" element={<SearchResults />} />
