@@ -2,10 +2,27 @@ import axios from "axios";
 
 const main_url = "https://nc-project-news.onrender.com/api";
 
-export const getArticles = ({ sortBy = "created_at", order = "desc" } = {}) => {
+export const getArticles = ({
+  sortBy = "created_at",
+  order = "desc",
+  page = 1,
+  limit = 5,
+} = {}) => {
   return axios
-    .get(`${main_url}/articles?sort_by=${sortBy}&order=${order}`)
-    .then((response) => response.data.result)
+    .get(`${main_url}/articles`, {
+      params: {
+        sort_by: sortBy,
+        order: order,
+        page: page,
+        limit: limit,
+      },
+    })
+    .then((response) => {
+      if (!response.data.result || !response.data.total_count) {
+        throw new Error("Invalid response format from the server");
+      }
+      return response.data;
+    })
     .catch((error) => {
       console.error("Error fetching articles", error);
       throw error;

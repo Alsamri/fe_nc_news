@@ -4,26 +4,41 @@ import { getArticles } from "../utils/api";
 import { SortByArticles } from "./sortarticleBy";
 import { SearchBar } from "./searchBar";
 export const FetchArticles = () => {
-  const [articles, setarticles] = useState([]);
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [limit] = useState(5);
+
   useEffect(() => {
     const sortBy = searchParams.get("sort_by") || "created_at";
     const order = searchParams.get("order") || "desc";
 
-    getArticles({ sortBy, order })
+    getArticles({ sortBy, order, page: currentPage, limit })
       .then((data) => {
-        setarticles(data);
+        setArticles(data.result || []);
+        setTotalCount(data.total_count || 0);
         setLoading(false);
       })
       .catch((error) => {
         console.error(error);
         setLoading(false);
       });
-  }, [searchParams]);
+  }, [searchParams, currentPage, limit]);
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   if (loading) {
     return <p>Loading articles...</p>;
   }
+
   return (
     <>
       <SearchBar />
@@ -53,6 +68,24 @@ export const FetchArticles = () => {
           </li>
         ))}
       </ul>
+
+      <div className="pagination-controls">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </>
   );
 };
