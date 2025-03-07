@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { getArticles } from "../utils/api";
-
+import { SortByArticles } from "./sortarticleBy";
 export const SearchResults = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
-
+  const sortBy = searchParams.get("sort_by") || "created_at";
+  const order = searchParams.get("order") || "desc";
   useEffect(() => {
     if (query) {
-      getArticles({})
+      getArticles({ sort_by: sortBy, order: order })
         .then((data) => {
           setArticles(
-            data.filter((article) =>
-              article.title.toLowerCase().includes(query.toLowerCase())
+            data.result.filter(
+              (article) =>
+                article.title.toLowerCase().includes(query.toLowerCase()) ||
+                article.author.toLowerCase().includes(query.toLowerCase()) ||
+                article.topic.toLowerCase().includes(query.toLowerCase())
             )
           );
           setLoading(false);
         })
         .catch(() => setLoading(false));
     }
-  }, [query]);
+  }, [query, sortBy, order]);
 
   if (loading) return <p>Loading...</p>;
   if (!articles.length) return <p>No results found for "{query}"</p>;
@@ -29,9 +33,10 @@ export const SearchResults = () => {
   return (
     <>
       <h2>Search Results for "{query}"</h2>
-      <Link to="/post-article">
+      <SortByArticles />
+      {/* <Link to="/post-article">
         <button className="add-article-btn">➕ Add New Article</button>
-      </Link>
+      </Link> */}
       <ul className="container">
         {articles.map((article) => (
           <li key={article.article_id}>
