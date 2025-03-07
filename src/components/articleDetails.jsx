@@ -10,7 +10,7 @@ import {
 } from "../utils/api";
 import { UserContext } from "./loggedUserContext";
 import { Comment } from "./voteonComments";
-
+import { useNavigate } from "react-router-dom";
 export const ArticleDetails = () => {
   const [articledetail, setarticledetail] = useState(null);
   const { id } = useParams();
@@ -22,7 +22,7 @@ export const ArticleDetails = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [isVoting, setIsVoting] = useState(false);
-
+  const navigate = useNavigate();
   const { loggedInUser } = useContext(UserContext);
   const userName = loggedInUser?.username || null;
 
@@ -105,7 +105,6 @@ export const ArticleDetails = () => {
         setCommentCount((priorCount) => parseInt(priorCount) - 1);
       })
       .catch((error) => {
-        console.error("Failed to delete comment", error);
         setError("Failed to delete comment. Please try again.");
       });
   };
@@ -118,7 +117,7 @@ export const ArticleDetails = () => {
           navigate("/");
         })
         .catch(() => {
-          alert("Failed to delete article.");
+          setError("Failed to delete article.");
         });
     }
   };

@@ -256,7 +256,6 @@ button:hover {
 .sort-button:hover {
   background-color: #0056b3;
 }
-
 header {
   display: flex;
   justify-content: space-between;
@@ -269,7 +268,7 @@ header {
 
 header h1 {
   font-size: 1.8rem;
-  color: #f8f9fa;
+  color: #e7ecf1;
 }
 
 .nav-links {

@@ -1,7 +1,7 @@
 import { UserContext } from "./loggedUserContext";
 import { postArticle } from "../utils/api";
 import { useState, useContext } from "react";
-
+import { useNavigate } from "react-router-dom";
 export const AddNewArticle = () => {
   const { loggedInUser } = useContext(UserContext);
   const userName = loggedInUser ? loggedInUser.username : "";
@@ -12,7 +12,7 @@ export const AddNewArticle = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -32,13 +32,14 @@ export const AddNewArticle = () => {
       ImgUrl || "http://DefaultURL-IMG.jpg"
     )
       .then((data) => {
-        console.log(data);
-
         setSuccessMessage(`Article posted successfully!: ${data.article_id}`);
         setTitle("");
         setBody("");
         setTopics([]);
         setImgUrl("");
+        setTimeout(() => {
+          navigate(`/articles/${data.article_id}`);
+        }, 1000);
       })
       .catch(() => {
         setError("Failed to post article. Please try again.");

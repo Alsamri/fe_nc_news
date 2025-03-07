@@ -142,21 +142,14 @@ export const postArticle = (author, title, body, topic, article_img_url) => {
       topic,
       article_img_url,
     })
-    .then((response) => response.data)
+    .then((response) => response.data.article)
     .catch((error) => {
-      console.error("Error posting article", error);
       throw error;
     });
 };
 
 export const deleteArticle = (id) => {
-  return axios
-    .delete(`${main_url}/articles/${id}`)
-    .then(() => {
-      console.log("Article deleted successfully");
-    })
-    .catch((error) => {
-      console.error("Failed to delete article", error);
-      throw new Error("Could not delete the article.");
-    });
+  return axios.delete(`${main_url}/articles/${id}`).catch(() => {
+    throw new Error("Could not delete the article.");
+  });
 };
