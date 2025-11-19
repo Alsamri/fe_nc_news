@@ -26,7 +26,7 @@ export const HeaderMenu = () => {
             alt={loggedInUser.name}
             className="avatar"
           />
-          <span className="username">@{loggedInUser.username}</span>
+          <span className="username">{loggedInUser.username}</span>
           <button onClick={logout} className="logout-btn">
             Logout
           </button>
