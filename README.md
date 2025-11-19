@@ -1,43 +1,105 @@
-News Article App 📰
-Live Demo
-[Deployed Version](https://aloisa.netlify.app)
+# News Article App 📰
 
-About the Project:
-This is a full-stack news article app that allows users to read, comment on, and vote on articles. Users can also add new comments and delete their own.
+A full-stack news application for browsing, commenting, and voting on articles. Built with React and powered by a RESTful API.
 
-Features:
-View and filter news articles by topic
-Read full articles with images
-Upvote/downvote articles and comments
-Post new comments
-Delete own comments
+[Live Demo](https://aloisa.netlify.app) | [Backend Repository](https://github.com/Alsamri/nc_project_news)
 
-Tech Stack:
-Front End: React, React Router, CSS
-Back End: Node.js, Express, PostgreSQL
-API Requests: Axios
-🔗 [Back End Repository](https://github.com/Alsamri/nc_project_news)
+## Features
 
-Requirements:
-Node.js: v23.3.0
+- 📖 Browse and filter articles by topic
+- 🖼️ View full articles with images
+- 👍👎 Upvote and downvote articles and comments
+- 💬 Post and delete your own comments
+- 👤 User authentication system
+- 📱 Fully responsive design
 
-Running Locally:
-1- Clone the repository
+## Tech Stack
 
-git clone https://github.com/Alsamri/fe_nc_news.git
+**Frontend:**
+- React with React Router
+- Axios for API requests
+- Modern CSS with responsive design
+- Vite build tool
 
-2- Navigate to the project directory:
+**Backend:**
+- Node.js & Express
+- PostgreSQL database
+- RESTful API architecture
 
-cd nc-news/nc-news-FE-project/
+## Prerequisites
 
-3- Install dependencies:
+- Node.js v23.3.0 or higher
+- Docker (optional, for containerized setup)
 
-npm install
+## Getting Started
 
-4- Start the development server:
+### Local Setup
 
-npm start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Alsamri/fe_nc_news.git
+   cd fe_nc_news
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   
+   The app will be available at `http://localhost:5173`
+
+### Docker Setup
+
+1. **Start the container**
+   ```bash
+   docker compose up --build
+   ```
+
+2. **Access the app**
+   
+   Open `http://localhost:5173` in your browser
+
+3. **Stop the container**
+   ```bash
+   docker compose down
+   ```
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with hot reload |
+| `npm run build` | Build production bundle |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint for code quality |
+
+## Project Structure
+
+```
+├── src/
+│   ├── components/     # React components
+│   ├── utils/          # API utilities and helpers
+│   ├── App.jsx         # Main app component
+│   └── index.css       # Global styles
+├── public/             # Static assets
+├── Dockerfile          # Docker configuration
+├── docker.yaml         # Docker Compose setup
+└── vite.config.js      # Vite configuration
+```
+
+## API Integration
+
+This frontend connects to the NC News API. Make sure the backend is running on `http://localhost:9000` or update the API base URL in your configuration.
+
+Backend repository: [NC News API](https://github.com/Alsamri/nc_project_news)
+
+
 
 ---
 
-This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
+**Portfolio Project:** Created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
