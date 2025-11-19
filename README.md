@@ -10,7 +10,6 @@ A full-stack news application for browsing, commenting, and voting on articles. 
 - 🖼️ View full articles with images
 - 👍👎 Upvote and downvote articles and comments
 - 💬 Post and delete your own comments
-- 👤 User authentication system
 - 📱 Fully responsive design
 
 ## Tech Stack
